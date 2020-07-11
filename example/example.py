@@ -10,9 +10,12 @@ from keras.wrappers.scikit_learn import KerasRegressor
 import xgboost as xgb
 import lightgbm as lgb
 
+import sys
+sys.path.append('../src/')
+
 from utils import define_network
-from variables import *
 from stacked_model import StackingAveragedModelsKeras
+from variables import *
 
 
 data = pd.read_csv('input_ex.csv', index_col=0)
