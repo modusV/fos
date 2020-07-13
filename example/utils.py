@@ -3,7 +3,17 @@ from keras.initializers import RandomNormal
 from keras.layers import Dense, BatchNormalization, Input, Dropout, Activation
 from keras import optimizers
 
+
 def define_network(inp):
+    """
+    Description of define_network
+    
+    Best achieved network for regression problem in The Bronx.
+
+    Args:
+        inp (undefined): input data as pandas dataframe
+
+    """
     def dn():
         random_norm_init = RandomNormal(seed=1)
 

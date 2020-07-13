@@ -17,11 +17,14 @@ from utils import define_network
 from stacked_model import StackingAveragedModelsKeras
 from variables import *
 
+# Import training data
 
 data = pd.read_csv('input_ex.csv', index_col=0)
 y = data['GHI']
 X = data.drop(columns=['GHI'])
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42)
+
+# Define classifiers
 
 callback = EarlyStopping(monitor='val_mse', patience=15, restore_best_weights=True)
 clf_nn = KerasRegressor(build_fn=define_network(X_train), verbose=0, epochs=150, batch_size=50, validation_split=0.2, callbacks=[callback])
@@ -32,7 +35,12 @@ clf_lgb = lgb.LGBMRegressor(**best_lgb_found)
 clf_gb = GradientBoostingRegressor(**best_gb_found)
 
 base_models = dict(xgb=clf_xgb, nn=clf_nn, lgb=clf_lgb, gb=clf_gb)
+
+# Create model
+
 stacked = StackingAveragedModelsKeras(base_models, clf_lasso, 5)
+
+# Train and predict
 
 stacked.fit(X_train, y_train)
 predictions = stacked.predict(X_test.values)

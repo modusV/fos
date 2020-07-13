@@ -7,15 +7,46 @@ from sklearn.base import TransformerMixin, RegressorMixin, BaseEstimator
 
 
 class StackingAveragedModelsKeras(BaseEstimator, RegressorMixin, TransformerMixin):
+    """
+    Description of StackingAveragedModelsKeras
+
+    Creates a stacked average estimator capable of improving the overall accuracy.
+    Automatically scales input of estimator that have the 'nn' as key in the input dictionary.
+
+    """
+    
+    
     def __init__(self, base_models, meta_model, n_folds=5):
+        """
+        Description of __init__
+
+        Args:
+            self (undefined):
+            base_models (undefined): dictionary of base models
+            meta_model (undefined): array of meta models
+            n_folds=5 (undefined): number of folds for cross validation
+
+        """
         self.base_models = base_models
         self.meta_model = meta_model
         self.n_folds = n_folds
         self.scalerx = MinMaxScaler()
         self.scalery = MinMaxScaler()
    
+   
     def fit(self, X, y):
+        """
+        Description of fit
+        
+        Fit model on input data
 
+        Args:
+            self (undefined):
+            X (undefined): X training data
+            y (undefined): y training data
+
+        """
+    
         self.base_models_ = {key:list() for key, clf in self.base_models.items()}
         self.meta_model_ = deepcopy(self.meta_model)
         kfold = KFold(n_splits=self.n_folds, shuffle=True, random_state=156)
@@ -48,6 +79,15 @@ class StackingAveragedModelsKeras(BaseEstimator, RegressorMixin, TransformerMixi
    
 
     def predict(self, X):
+        """
+        Description of predict
+        Predict for test data
+
+        Args:
+            self (undefined):
+            X (undefined): X test data
+
+        """
         all_pred = []
         for name, base_models in self.base_models_.items():
             single_predictions = []
@@ -64,10 +104,30 @@ class StackingAveragedModelsKeras(BaseEstimator, RegressorMixin, TransformerMixi
         meta_features = np.column_stack(all_pred)
         return self.meta_model_.predict(meta_features)
     
+    
     def save_model(self, filename):
+        """
+        Description of save_model
+        
+        Save trained model
+
+        Args:
+            self (undefined):
+            filename (undefined): filename of model
+
+        """
         joblib.dump(self, filename)
-      
+    
+    
     @staticmethod  
     def load_model(filename):
+        """
+        Description of load_model
+        Load trained model
+
+        Args:
+            filename (undefined): filename of model
+
+        """
         return joblib.load(filename)
 

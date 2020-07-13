@@ -1,3 +1,7 @@
+"""
+Best parameters found for solar irradiance estimation in The Bronx area
+"""
+
 best_xgb_found = {
    'colsample_bytree': 0.6,
    'eta': 0.9543574177848344,
