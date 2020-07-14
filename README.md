@@ -4,7 +4,8 @@ Forecast the Global Horizontal Irradiance with a stacked regressor using only we
 
 ## How to use it
 
-1. Install the needed libraries from requirements.txt
+1. Install the needed libraries from requirements.txt with:
+```pip install -r requirements.txt```
 2. Import the Stacked model from stacked_model file.
 3. Either load a pre-trained model using `load_model` or create a new object.
 4. Fit the model to your data using the fit method to achieve an higher accuracy (this step can be skipped in case of unavailability of training data).
